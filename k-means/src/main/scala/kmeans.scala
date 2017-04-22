@@ -22,7 +22,7 @@ object kMeans {
 		val sqlContext = new org.apache.spark.sql.SQLContext(sc)
 	  
 		println("------------ load data ftom hdfs ---------------")
-		val taxiDF = sqlContext.read.format("com.databricks.spark.csv").option("header", "true").load("/user/yw2504/finalProject/yellow/2016/*.csv")
+		val taxiDF = sqlContext.read.format("com.databricks.spark.csv").option("header", "true").option("model", "DROPMALFORMED").load("/user/yw2504/finalProject/yellow/2016/*.csv")
 		taxiDF.registerTempTable("trip")
 		val DF = sqlContext.sql("select * from trip where VendorID not like '%end%'")
 		DF.registerTempTable("DF")
@@ -33,13 +33,13 @@ object kMeans {
 		val pickup_pos = pickup_position.
 		withColumn("pickup_latitudeTmp", pickup_position("pickup_latitude").cast(DoubleType)).drop("pickup_latitude").withColumnRenamed("pickup_latitudeTmp", "pickup_latitude").
 		withColumn("pickup_longitudeTmp", pickup_position("pickup_longitude").cast(DoubleType)).drop("pickup_longitude").withColumnRenamed("pickup_longitudeTmp", "pickup_longitude")
-
-
-
+		
+		val pickup_p = pickup_pos.filter(pickup_pos("pickup_latitude") < 40.915568 && pickup_pos("pickup_latitude") > 40.495992).
+		filter(pickup_pos("pickup_longitude") < -73.699215 && pickup_pos("pickup_longitude") > -74.257159)
 
 		val assembler = new VectorAssembler().setInputCols(Array("pickup_latitude", "pickup_longitude")).setOutputCol("features")
-		val featureVector = assembler.transform(pickup_pos).select("features").cache()
-		val file = new File("/home/yw2504/kMeansModel/cost2")
+		val featureVector = assembler.transform(pickup_p).select("features").cache()
+		val file = new File("/home/yw2504/kMeansModel/cost3")
 		val bw = new BufferedWriter(new FileWriter(file))
 		
 		println("####### begin to train Kmeans model ########")
