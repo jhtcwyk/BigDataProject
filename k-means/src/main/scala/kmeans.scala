@@ -27,33 +27,47 @@ object kMeans {
 		val DF = sqlContext.sql("select * from trip where VendorID not like '%end%'")
 		DF.registerTempTable("DF")
 		
-		val pickup_position = sqlContext.sql("select pickup_latitude, pickup_longitude from DF")
+		val position = sqlContext.sql("select pickup_latitude, pickup_longitude, dropoff_latitude, dropoff_longitude from DF")
+		
 		
 		import org.apache.spark.sql.types.DoubleType		
-		val pickup_pos = pickup_position.
-		withColumn("pickup_latitudeTmp", pickup_position("pickup_latitude").cast(DoubleType)).drop("pickup_latitude").withColumnRenamed("pickup_latitudeTmp", "pickup_latitude").
-		withColumn("pickup_longitudeTmp", pickup_position("pickup_longitude").cast(DoubleType)).drop("pickup_longitude").withColumnRenamed("pickup_longitudeTmp", "pickup_longitude")
-		
-		val pickup_p = pickup_pos.filter(pickup_pos("pickup_latitude") < 40.915568 && pickup_pos("pickup_latitude") > 40.495992).
-		filter(pickup_pos("pickup_longitude") < -73.699215 && pickup_pos("pickup_longitude") > -74.257159)
+		val pos_double = position.
+		withColumn("pickup_latitudeTmp", position("pickup_latitude").cast(DoubleType)).drop("pickup_latitude").withColumnRenamed("pickup_latitudeTmp", "pickup_latitude").
+		withColumn("pickup_longitudeTmp", position("pickup_longitude").cast(DoubleType)).drop("pickup_longitude").withColumnRenamed("pickup_longitudeTmp", "pickup_longitude").
+		withColumn("dropoff_latitudeTmp", position("dropoff_latitude").cast(DoubleType)).drop("dropoff_latitude").withColumnRenamed("dropoff_latitudeTmp", "dropoff_latitude").
+		withColumn("dropoff_longitudeTmp", position("dropoff_longitude").cast(DoubleType)).drop("dropoff_longitude").withColumnRenamed("dropoff_longitudeTmp", "dropoff_longitude")
+				
+		val pos_filter = pos_double.filter(pos_double("pickup_latitude") < 40.915568 && pos_double("pickup_latitude") > 40.495992).
+		filter(pos_double("pickup_longitude") < -73.699215 && pos_double("pickup_longitude") > -74.257159).
+		filter(pos_double("dropoff_latitude") < 40.915568 && pos_double("dropoff_latitude") > 40.495992).
+		filter(pos_double("dropoff_longitude") < -73.699215 && pos_double("dropoff_longitude") > -74.257159)
 
-		val assembler = new VectorAssembler().setInputCols(Array("pickup_latitude", "pickup_longitude")).setOutputCol("features")
-		val featureVector = assembler.transform(pickup_p).select("features").cache()
-		val file = new File("/home/yw2504/kMeansModel/cost3")
-		val bw = new BufferedWriter(new FileWriter(file))
+		val assembler_pickup_p = new VectorAssembler().setInputCols(Array("pickup_latitude", "pickup_longitude")).setOutputCol("features")
+		val featureVector_pickup_p = assembler_pickup_p.transform(pos_filter).select("features").cache()
+		val file_pickup = new File("/home/yw2504/kMeansModel/outputResults/SSE_For_K_num_pickup2")
+		val bw_pickup = new BufferedWriter(new FileWriter(file_pickup))
+		
+		val assembler_dropoff_p = new VectorAssembler().setInputCols(Array("dropoff_latitude", "dropoff_longitude")).setOutputCol("features")
+		val featureVector_dropoff_p = assembler_dropoff_p.transform(pos_filter).select("features").cache()
+		val file_dropoff = new File("/home/yw2504/kMeansModel/outputResults/SSE_For_K_num_dropoff2")
+		val bw_dropoff = new BufferedWriter(new FileWriter(file_dropoff))
 		
 		println("####### begin to train Kmeans model ########")
 		
 		var a = 0;
-		for( a <- 3 to 100){
-			val kmeans = new KMeans().setK(a).setFeaturesCol("features").setPredictionCol("prediction").setMaxIter(30)
-			val model = kmeans.fit(featureVector)
-			val ssd = model.computeCost(featureVector)
-			bw.write(a + "," + ssd)
-			bw.newLine()
+		for( a <- 3 to 300){
+			val kmeans = new KMeans().setK(a).setFeaturesCol("features").setPredictionCol("prediction").setMaxIter(10)
+			val model_pickup = kmeans.fit(featureVector_pickup_p)
+			val model_dropoff = kmeans.fit(featureVector_dropoff_p)
+			val ssd_pickup = model_pickup.computeCost(featureVector_pickup_p)
+			val ssd_dropoff = model_dropoff.computeCost(featureVector_dropoff_p)
+			bw_pickup.write(a + "," + ssd_pickup)
+			bw_pickup.newLine()
+			bw_dropoff.write(a + "," + ssd_dropoff)
+			bw_dropoff.newLine()
         }
-		bw.close()
-		
+		bw_pickup.close()
+		bw_dropoff.close()
 		return
 
   }
