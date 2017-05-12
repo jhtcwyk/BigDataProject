@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <title>Animating Symbols</title>
+    <style>
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map {
+        height: 100%;
+      }
+      /* Optional: Makes the sample page fill the window. */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+    <script>
+      // This example adds an animated symbol to a polyline.
+
+      function initMap() {
+        var map = new google.maps.Map(document.getElementById('map'), {
+          center: {lat: 40.7128, lng: -74.0059},
+          zoom: 13,
+          mapTypeId: 'terrain'
+        });
+
+        // Define the symbol, using one of the predefined paths ('CIRCLE')
+        // supplied by the Google Maps JavaScript API.
+        var lineSymbol = {
+          path: google.maps.SymbolPath.CIRCLE,
+          scale: 8,
+          strokeColor: '#393'
+        };
+
+        // Create the polyline and add the symbol to it via the 'icons' property.
+        var line1 = new google.maps.Polyline({
+          path: [{lat: 40.74177603, lng: -74.00149746}, {lat: 40.75044999, lng: -73.99481051}],
+          icons: [{
+            icon: lineSymbol,
+            offset: '100%'
+          }],
+          map: map
+        });
+          
+          
+          var line2 = new google.maps.Polyline({
+          path: [{lat: 40.76030096, lng: -73.99884222}, {lat: 40.751551, lng: -73.993934}],
+          icons: [{
+            icon: lineSymbol,
+            offset: '100%'
+          }],
+          map: map
+        });
+          
+          var line3 = new google.maps.Polyline({
+          path: [{lat: 40.76590936, lng: -73.97634151}, {lat: 40.76590936, lng: -73.97634151}],
+          icons: [{
+            icon: lineSymbol,
+            offset: '100%'
+          }],
+          map: map
+        });
+          var line4 = new google.maps.Polyline({
+          path: [{lat: 40.74691959, lng: -74.00451887}, {lat: 40.74173969, lng: -73.99415556}],
+          icons: [{
+            icon: lineSymbol,
+            offset: '100%'
+          }],
+          map: map
+        });
+        var line5 = new google.maps.Polyline({
+          path: [{lat: 40.76915505, lng: -73.98191841}, {lat: 40.76915505, lng: -73.98191841}],
+          icons: [{
+            icon: lineSymbol,
+            offset: '100%'
+          }],
+          map: map
+        }); 
+        var line6 = new google.maps.Polyline({
+          path: [{lat: 40.74096374, lng: -73.98602213}, {lat: 40.751873, lng: -73.977706}],
+          icons: [{
+            icon: lineSymbol,
+            offset: '100%'
+          }],
+          map: map
+        });
+        var line7 = new google.maps.Polyline({
+          path: [{lat: 40.75640548, lng: -73.9900262}, {lat: 40.75320159, lng: -73.9779874}],
+          icons: [{
+            icon: lineSymbol,
+            offset: '100%'
+          }],
+          map: map
+        });
+        var line8 = new google.maps.Polyline({
+          path: [{lat: 40.751396, lng: -74.005226}, {lat: 40.75044999, lng: -73.99481051}],
+          icons: [{
+            icon: lineSymbol,
+            offset: '100%'
+          }],
+          map: map
+        });
+        var line9 = new google.maps.Polyline({
+          path: [{lat: 40.711512, lng: -74.015756}, {lat: 40.701907, lng: -74.013942}],
+          icons: [{
+            icon: lineSymbol,
+            offset: '100%'
+          }],
+          map: map
+        });
+        var line10 = new google.maps.Polyline({
+          path: [{lat: 40.74691959, lng: -74.00451887}, {lat: 40.7403432, lng: -73.98955109}],
+          icons: [{
+            icon: lineSymbol,
+            offset: '100%'
+          }],
+          map: map
+        });
+
+        animateCircle(line1);
+        animateCircle(line2);
+        animateCircle(line3);
+        animateCircle(line4);
+        animateCircle(line5);
+        animateCircle(line6);
+        animateCircle(line7);
+        animateCircle(line8);
+        animateCircle(line9);
+        animateCircle(line10);
+          
+      }
+
+      // Use the DOM setInterval() function to change the offset of the symbol
+      // at fixed intervals.
+      function animateCircle(line) {
+          var count = 0;
+          window.setInterval(function() {
+            count = (count + 1) % 200;
+
+            var icons = line.get('icons');
+            icons[0].offset = (count / 2) + '%';
+            line.set('icons', icons);
+        }, 20);
+      }
+    </script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?AIzaSyANFtoJKKCfdE44RHBoIS3nYI2Dfclfth0&callback=initMap">
+    </script>
+  </body>
+</html>
