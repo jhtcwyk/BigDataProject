@@ -1,7 +1,7 @@
 # BigDataProject
 <hr/>
 
-Team Members_
+Team Members
 
 |Name                    |    Net ID    |  
 |------------------------|:------------:|
@@ -17,7 +17,7 @@ Our topic is exploring the NYC taxi trips.
 +	Prepare Weather Information and join with taxi trips.
 +	Train prediction model for taxi pickup number in one hour window.
 +	Make statisticals for Uber and CItibike. Find a pattern or impact on each dataset.
-+	Visualize the data
++	Visualize the data.
 
 
 ## Data Sources
