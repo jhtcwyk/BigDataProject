@@ -5,7 +5,7 @@ Read CSV, Clean Data, Cast DataType, Join Datasets, Make statistic, Index Featur
 
 +   .scala Files: all in spark 2.1.0, you can run code in these files in spark-shell or zeppelin. These files are for you to read in webpage. For more details, you can download zeppelin notebooks in the notebook folder.
 +	nodebook folder: zeppelin notebooks.
-+	SSE-K: scala code, you can use spark-submit to submit to cluster to run. Output K-SSE pairs.
++	SSE-K: scala code, output K-SSE pairs. Use spark-submit to run.
 +	output: statistic analysis results in csv.
 
 
