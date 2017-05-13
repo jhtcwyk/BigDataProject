@@ -1,7 +1,7 @@
 # BigDataProject
 <hr/>
 
-Team Members-
+Team Members_
 
 |Name                    |    Net ID    |  
 |------------------------|:------------:|
@@ -9,7 +9,7 @@ Team Members-
 |Luyao Chen              |    lc3442    |
 |Yalin Zhang             |    yz2883    | 
 
-##Project Topic
+## Project Topic
 Our topic is exploring the NYC taxi trips. 
 
 +	Analyzing the taxi data to find statistical models, like Regions with large number of drop offs at morning peak hours to find work areas.
@@ -24,6 +24,6 @@ Our topic is exploring the NYC taxi trips.
 
 
 ## Data Sources
-NYC TLC Trip Record Data: http://www.nyc.gov/html/tlc/html/about/trip_record_data.shtml<br>
-CitiBike System Data: https://www.citibikenyc.com/system-data<br>
-Central Park weather data comes from the National Climatic Data Center: https://www.ncdc.noaa.gov/cdo-web/datatools/lcd<br>
+NYC TLC Trip Record Data: http://www.nyc.gov/html/tlc/html/about/trip_record_data.shtml
+CitiBike System Data: https://www.citibikenyc.com/system-data
+Central Park weather data comes from the National Climatic Data Center: https://www.ncdc.noaa.gov/cdo-web/datatools/lcd
